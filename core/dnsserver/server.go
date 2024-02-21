@@ -62,7 +62,7 @@ func NewServer(addr string, group []*Config) (*Server, error) {
 	s := &Server{
 		Addr:         addr,
 		zones:        make(map[string][]*Config),
-		graceTimeout: 5 * time.Second,
+		graceTimeout: 60 * time.Second,
 		idleTimeout:  10 * time.Second,
 		readTimeout:  3 * time.Second,
 		writeTimeout: 5 * time.Second,

@@ -81,13 +81,14 @@ ifeq ($(DOCKER),)
 	$(error "Please specify Docker registry to use. Use DOCKER=coredns for releases")
 else
 	docker version
+	set -x
 	for arch in $(LINUX_ARCH); do \
 	    cp Dockerfile build/docker/$${arch} ; \
 	    DOCKER_ARGS=""; \
 	    if [ "$${arch}" = "riscv64" ]; then \
 	        DOCKER_ARGS="--build-arg=DEBIAN_IMAGE=debian:unstable-slim --build-arg=BASE=ghcr.io/go-riscv/distroless/static-unstable:nonroot"; \
 	    fi; \
-	    DOCKER_BUILDKIT=1 docker build --platform=$${arch} -t $(DOCKER_IMAGE_NAME):$${arch}-$(VERSION) $${DOCKER_ARGS} build/docker/$${arch} ;\
+	    DOCKER_BUILDKIT=1 docker buildx build --platform=$${arch} -t $(DOCKER_IMAGE_NAME):$${arch}-$(VERSION) $${DOCKER_ARGS} build/docker/$${arch} ;\
 	done
 endif
 
